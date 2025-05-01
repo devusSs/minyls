@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+
+	"github.com/devusSs/minyls/internal/cli"
+	"github.com/devusSs/minyls/internal/log"
 )
 
 var (
@@ -61,18 +64,23 @@ func printHelp() {
 	fmt.Println("	clear		[option]")
 }
 
+// logging may be used here for cli commands
+// since each function in the cli package
+// calls cli.initialize first which sets up logging
 func handleCommandLine() {
 	command := os.Args[1]
 
 	switch command {
 	case "help":
 		printHelp()
-		os.Exit(0)
 	case "version":
 		printVersion()
-		os.Exit(0)
 	case "upload":
-		fmt.Println("upload command, not implemented")
+		err := cli.Upload()
+		if err != nil {
+			log.Log().Err(err).Str("func", "handleCommandLine").Msg("upload failed")
+			os.Exit(1)
+		}
 	case "list":
 		fmt.Println("list command, not implemented")
 	case "download":
