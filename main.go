@@ -67,8 +67,10 @@ func handleCommandLine() {
 	switch command {
 	case "help":
 		printHelp()
+		os.Exit(0)
 	case "version":
 		printVersion()
+		os.Exit(0)
 	case "upload":
 		fmt.Println("upload command, not implemented")
 	case "list":
