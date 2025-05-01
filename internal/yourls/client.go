@@ -25,7 +25,7 @@ func NewClient(endpoint string, signature string) *Client {
 // a request using a context and url.Values
 func (c *Client) doAPIRequest(
 	ctx context.Context,
-	values map[string]interface{},
+	values map[string]string,
 ) (*http.Response, error) {
 	v, err := convertValues(values)
 	if err != nil {
@@ -48,15 +48,10 @@ func (c *Client) doAPIRequest(
 	return resp, nil
 }
 
-func convertValues(values map[string]interface{}) (url.Values, error) {
+func convertValues(values map[string]string) (url.Values, error) {
 	v := url.Values{}
 	for key, value := range values {
-		c, ok := value.(string)
-		if !ok {
-			return nil, fmt.Errorf("could not type cast '%v' to string", value)
-		}
-
-		v.Set(key, c)
+		v.Set(key, value)
 	}
 
 	return v, nil

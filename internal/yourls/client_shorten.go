@@ -25,13 +25,13 @@ func (c *Client) Shorten(ctx context.Context, input string, title string) (strin
 		return "", fmt.Errorf("could not generate a uuid for keyword: %w", err)
 	}
 
-	v := make(map[string]interface{})
+	v := make(map[string]string)
 	v["signature"] = c.signature
 	v["action"] = "shorturl"
 	v["format"] = "json"
-	v["url"] = u
+	v["url"] = u.String()
 	v["title"] = title
-	v["keyword"] = uid
+	v["keyword"] = uid.String()
 
 	resp, err := c.doAPIRequest(ctx, v)
 	if err != nil {
