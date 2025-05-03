@@ -6,10 +6,12 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"time"
 
 	"github.com/devusSs/minyls/internal/clip"
 	"github.com/devusSs/minyls/internal/log"
 	"github.com/devusSs/minyls/internal/minio"
+	"github.com/devusSs/minyls/internal/storage"
 	"github.com/devusSs/minyls/internal/yourls"
 )
 
@@ -92,7 +94,19 @@ func Upload() error {
 		Str("yourls_link", link).
 		Msg("got shortened yourls link")
 
-	// TODO: storage
+	entry := &storage.DataEntry{
+		Timestamp:  time.Now(),
+		MinioLink:  minioLink,
+		YOURLSLink: link,
+		Expiry:     e.MinioLinkExpiry,
+	}
+
+	err = storage.WriteEntry(entry)
+	if err != nil {
+		return fmt.Errorf("failed to write entry to storage: %w", err)
+	}
+
+	log.Log().Info().Str("func", "cli.Upload").Any("entry", entry).Msg("wrote entry to storage")
 
 	err = clip.Write(link)
 	if err != nil {

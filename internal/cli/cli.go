@@ -6,6 +6,7 @@ import (
 	"github.com/devusSs/minyls/internal/clip"
 	"github.com/devusSs/minyls/internal/env"
 	"github.com/devusSs/minyls/internal/log"
+	"github.com/devusSs/minyls/internal/storage"
 )
 
 var e *env.Env
@@ -32,6 +33,13 @@ func initialize() error {
 	}
 
 	log.Log().Debug().Str("func", "cli.initialize").Any("env", e).Msg("loaded environment")
+
+	err = storage.Init(e.MinioLinkExpiry)
+	if err != nil {
+		return fmt.Errorf("failed to init storage: %w", err)
+	}
+
+	log.Log().Debug().Str("func", "cli.Initialize").Msg("setup storage")
 
 	return nil
 }
