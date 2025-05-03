@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/devusSs/minyls/internal/clip"
 	"github.com/devusSs/minyls/internal/log"
 	"github.com/devusSs/minyls/internal/minio"
 	"github.com/devusSs/minyls/internal/yourls"
@@ -91,7 +92,14 @@ func Upload() error {
 		Str("yourls_link", link).
 		Msg("got shortened yourls link")
 
-	// TODO: storage & clip
+	// TODO: storage
+
+	err = clip.Write(link)
+	if err != nil {
+		return fmt.Errorf("could not write link to clip: %w", err)
+	}
+
+	log.Log().Info().Str("func", "cli.Upload").Str("link", link).Msg("wrote link to clip")
 
 	return nil
 }
