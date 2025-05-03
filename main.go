@@ -29,8 +29,10 @@ func init() {
 	}
 }
 
+const minArgs = 2
+
 func main() {
-	if len(os.Args) < 2 {
+	if len(os.Args) < minArgs {
 		fmt.Println("error: no command provided")
 		fmt.Println()
 		printHelp()
@@ -66,7 +68,7 @@ func printHelp() {
 
 // logging may be used here for cli commands
 // since each function in the cli package
-// calls cli.initialize first which sets up logging
+// calls cli.initialize first which sets up logging.
 func handleCommandLine() {
 	command := os.Args[1]
 

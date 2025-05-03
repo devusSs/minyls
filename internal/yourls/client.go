@@ -22,17 +22,17 @@ func NewClient(endpoint string, signature string) *Client {
 }
 
 // since all api calls are post we can simply build
-// a request using a context and url.Values
+// a request using a context and url.Values.
 func (c *Client) doAPIRequest(
 	ctx context.Context,
 	values map[string]string,
 ) (*http.Response, error) {
-	v, err := convertValues(values)
-	if err != nil {
-		return nil, fmt.Errorf("could not convert values: %w", err)
-	}
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.endpoint, valuesToReader(v))
+	req, err := http.NewRequestWithContext(
+		ctx,
+		http.MethodPost,
+		c.endpoint,
+		valuesToReader(convertValues(values)),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("could not create request: %w", err)
 	}
@@ -48,13 +48,13 @@ func (c *Client) doAPIRequest(
 	return resp, nil
 }
 
-func convertValues(values map[string]string) (url.Values, error) {
+func convertValues(values map[string]string) url.Values {
 	v := url.Values{}
 	for key, value := range values {
 		v.Set(key, value)
 	}
 
-	return v, nil
+	return v
 }
 
 func valuesToReader(values url.Values) io.Reader {

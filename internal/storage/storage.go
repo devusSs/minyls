@@ -98,11 +98,12 @@ func prepareStorage() error {
 	storageDir = filepath.Join(filepath.Dir(exePath), storageDir)
 	storagePath = filepath.Join(storageDir, ".minyls.data.json")
 
-	if err := os.MkdirAll(storageDir, 0700); err != nil {
+	err = os.MkdirAll(storageDir, 0700)
+	if err != nil {
 		return fmt.Errorf("failed to create storage dir: %w", err)
 	}
 
-	storageFile, err = os.OpenFile(storagePath, os.O_RDWR|os.O_CREATE, 0644)
+	storageFile, err = os.OpenFile(storagePath, os.O_RDWR|os.O_CREATE, 0600)
 	if err != nil {
 		return fmt.Errorf("failed to open storage file: %w", err)
 	}

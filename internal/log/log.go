@@ -15,7 +15,7 @@ import (
 // Setup creates needed directories, log file(s), sets the level
 // and removes old log files if needed.
 func Setup() error {
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
+	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix //nolint:reassign // dont annoy me
 	debug := strings.ToLower(os.Getenv("MINYLS_DEVELOPMENT")) == "true"
 
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
@@ -100,7 +100,8 @@ func removeOldLogs() {
 			continue
 		}
 
-		info, err := file.Info()
+		var info os.FileInfo
+		info, err = file.Info()
 		if err != nil {
 			fmt.Println("log.removeOldLogs: could not read file info:", err)
 			continue
