@@ -84,7 +84,11 @@ func handleCommandLine() {
 			os.Exit(1)
 		}
 	case "list":
-		fmt.Println("list command, not implemented")
+		err := cli.List()
+		if err != nil {
+			log.Log().Err(err).Str("func", "handleCommandLine").Msg("list failed")
+			os.Exit(1)
+		}
 	case "download":
 		fmt.Println("download command, not implemented")
 	case "delete":
