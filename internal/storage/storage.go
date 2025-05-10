@@ -59,6 +59,10 @@ func WriteEntry(entry *DataEntry) error {
 	return writeData()
 }
 
+func Read() (*Data, error) {
+	return currentData, nil
+}
+
 func findLatestID() int {
 	latest := 0
 	for _, e := range currentData.Entries {
